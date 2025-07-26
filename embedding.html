@@ -2,62 +2,35 @@
 <html>
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nakulabye Road, Uganda - Sunny Vibes</title>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
-    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Open Sans', sans-serif;
-            background: linear-gradient(to bottom, #ffeb99, #ffcc00); /* Sunny gradient */
-            color: #333;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        h1 {
-            font-family: 'Open Sans Condensed', sans-serif;
-            color: #d93e0e; /* Bright, sunny orange */
-        }
-        p {
-            font-family: 'Source Sans Pro', sans-serif;
-            font-size: 1.2em;
-        }
-        .sun-icon::before {
-            content: '☀️';
-            font-size: 2em;
-            display: block;
-            margin: 10px 0;
-        }
-        #weather {
-            margin-top: 20px;
-            font-weight: bold;
-        }
-    </style>
+  <title>AUTOMATED-TRAFFIC-LIGHT-MANAGEMENT-SYSTEM-PROJECT</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://use.fontawesome.com/releases/v6.6.0/css/all.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="css/frame.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="css/controls.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="css/custom.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&family=Open+Sans+Condensed:wght@300;700&family=Source+Sans+Pro:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="js/menu.js"></script>
+<!-- Add script for weather functionality -->
+<script src="js/weather.js"></script>
+  <script src="js/menu.js"></script>
+  <style>
+    .menu-embedding {
+      color: rgb(255, 255, 255) !important;
+      opacity: 1 !important;
+      font-weight: 700 !important;
+    }
+  </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>Welcome to Nakulabye Road, Uganda</h1>
-        <div class="sun-icon"></div>
-        <p>Experience the vibrant life of Nakulabye Road in Kampala, Uganda, bathed in warm, sunny weather!</p>
-        <div id="weather">Loading weather...</div>
-    </div>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="js/menu.js"></script>
-    <script>
-        // Example: Fetch weather data (optional)
-        $(document).ready(function() {
-            // Placeholder for weather API integration
-            $('#weather').text('Sunny, 27°C (81°F) - Typical weather in Kampala, Uganda!');
-        });
-    </script>
+  <div id="weather-container">
+    <h2>Current Location and Weather</h2>
+    <p id="location">Fetching location...</p>
+    <p id="weather">Fetching weather...</p>
+    <p id="error" style="color: red; display: none;"></p>
+  </div>
 </body>
-</html>
 
 </html>
