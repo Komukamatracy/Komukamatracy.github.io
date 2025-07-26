@@ -1,17 +1,20 @@
 <!doctype html>
 <html>
-
 <head>
-  <title>An Automated Traffic Light Management System </title>
+  <title>Uganda and Kampala Weather Heatmap - Rainy Conditions</title>
   <meta charset="utf-8" name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" media="screen" rel="stylesheet" type="text/css" />
+  <link href="https://use.fontawesome.com/releases/v6.5.1/css/all.css" rel="stylesheet" type="text/css" />
   <link href="css/frame.css" media="screen" rel="stylesheet" type="text/css" />
   <link href="css/controls.css" media="screen" rel="stylesheet" type="text/css" />
   <link href="css/custom.css" media="screen" rel="stylesheet" type="text/css" />
   <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
   <link href='https://fonts.googleapis.com/css?family=Open+Sans+Condensed:300,700' rel='stylesheet' type='text/css'>
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <!-- Leaflet.js and Leaflet.heat -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet.heat@0.2.0/dist/leaflet-heat.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="js/menu.js"></script>
   <style>
     .menu-embedding {
@@ -19,14 +22,74 @@
       opacity: 1 !important;
       font-weight: 700 !important;
     }
+    #map {
+      height: 100vh;
+      width: 100%;
+    }
   </style>
 </head>
-
 <body class="force-no-scroll">
   <div class="menu-container"></div>
-  <div class="iframe-container">
-    <iframe class="iframe" src="https://yenchiah.me/geo-heatmap/GeoHeatmap.html"></iframe>
+  <div class="map-container">
+    <div id="map"></div>
   </div>
-</body>
+  <script>
+    // Initialize the map centered on Kampala
+    var map = L.map('map').setView([0.3476, 32.5825], 8); // Kampala coordinates, zoom level for Uganda
 
+    // Add OpenStreetMap tile layer
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Fetch precipitation data from OpenWeatherMap
+    const apiKey = 'YOUR_OPENWEATHERMAP_API_KEY'; // Replace with your API key
+    const url = `https://api.openweathermap.org/data/3.0/onecall?lat=0.3476&lon=32.5825&exclude=current,minutely,daily,alerts&units=metric&appid=${apiKey}`;
+
+    $.getJSON(url, function(data) {
+      // Extract hourly precipitation data
+      const hourly = data.hourly;
+      const heatData = [];
+
+      // Define bounding box for Uganda (approximate coordinates)
+      const ugandaBounds = {
+        southWest: [L.latLng(-1.5, 29.5), L.latLng(-1.5, 35.0)],
+        northEast: [L.latLng(4.2, 29.5), L.latLng(4.2, 35.0)]
+      };
+
+      // Simulate grid points for Uganda (for simplicity, use a coarse grid)
+      const latStep = 0.5; // Adjust for finer/coarser grid
+      const lonStep = 0.5;
+      for (let lat = -1.5; lat <= 4.2; lat += latStep) {
+        for (let lon = 29.5; lon <= 35.0; lon += lonStep) {
+          // For each grid point, assign precipitation intensity (mock data or fetch from API)
+          // Here, we use sample data; replace with API calls for each coordinate if needed
+          const precip = hourly[Math.floor(Math.random() * hourly.length)].precipitation?.value || 0;
+          if (precip > 0) { // Only include points with precipitation
+            heatData.push([lat, lon, precip]); // [lat, lon, intensity]
+          }
+        }
+      }
+
+      // Add heatmap layer
+      L.heatLayer(heatData, {
+        radius: 25,
+        blur: 15,
+        maxZoom: 17,
+        gradient: {
+          0.0: 'blue',   // Light rain
+          0.5: 'green',  // Moderate rain
+          1.0: 'red'     // Heavy rain
+        }
+      }).addTo(map);
+
+      // Add marker for Kampala
+      L.marker([0.3476, 32.5825]).addTo(map)
+        .bindPopup('Kampala: Rainy Conditions')
+        .openPopup();
+    }).fail(function() {
+      alert('Failed to load weather data. Please check your API key or internet connection.');
+    });
+  </script>
+</body>
 </html>
